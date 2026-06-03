@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>黑名单管理</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="global-header">
+      <div class="product-brand">
+        <div class="logo-mark"></div>
+        <strong>乐享智税</strong>
+      </div>
+      <nav class="platform-nav">
+        <button>工作台</button>
+        <button>平台管理⌄</button>
+        <button class="active">业务中心⌄</button>
+        <button>数据中心⌄</button>
+      </nav>
+      <div class="global-search">
+        <span>⌕</span>
+        <input placeholder="搜索应用、菜单名称" />
+      </div>
+      <div class="header-tools">
+        <button>AI</button>
+        <button>通知</button>
+        <button>产品&服务</button>
+        <span class="user-avatar">李</span>
+        <strong>xfshzh1</strong>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <div class="brand module-brand">
+        <div>
+          <strong>事前风险</strong>
+        </div>
+        <button class="collapse-btn" type="button">≡</button>
+      </div>
+      <nav class="nav">
+        <button class="nav-item active" data-page="listPage" data-title="黑名单管理" data-desc="统一管理内部组织与外部企业的黑名单监控、查询历史和风险明细。">黑名单管理</button>
+        <button class="nav-item" data-page="riskQueryPage" data-title="黑名单查询" data-desc="通过企业名称或纳税人识别号发起单次黑名单风险查询。">黑名单查询</button>
+        <button class="nav-item" data-page="monitorSettingsPage" data-title="监控设置" data-desc="配置定时更新、风险提醒、权限可见范围和接口策略。">监控设置</button>
+        <button class="nav-item" data-page="operationLogsPage" data-title="操作日志" data-desc="追溯添加、更新、编辑、移除、查询等关键操作。">操作日志</button>
+      </nav>
+    </aside>
+
+    <main class="app">
+      <div class="page-tabs" id="pageTabs"></div>
+
+      <section id="listPage" class="page active">
+        <section class="metrics">
+          <div class="metric">
+            <span>监控对象</span>
+            <strong id="metricTotal">0</strong>
+          </div>
+          <div class="metric danger">
+            <span>命中黑名单</span>
+            <strong id="metricBlack">0</strong>
+          </div>
+          <div class="metric warning">
+            <span>存在风险项</span>
+            <strong id="metricRisk">0</strong>
+          </div>
+          <div class="metric muted">
+            <span>查询失败</span>
+            <strong id="metricFailed">0</strong>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">
+            <h2>筛选条件</h2>
+            <button class="text-btn" id="resetFilters">重置</button>
+          </div>
+          <form class="filter-grid" id="filterForm">
+            <label>
+              企业名称
+              <input name="name" type="search" placeholder="支持模糊搜索" />
+            </label>
+            <label>
+              纳税人识别号
+              <input name="credit" type="search" placeholder="精确或模糊搜索" />
+            </label>
+            <label>
+              对象类型
+              <select name="subjectType">
+                <option value="">全部</option>
+                <option>内部组织</option>
+                <option>外部企业</option>
+              </select>
+            </label>
+            <label>
+              企业类型
+              <select name="role">
+                <option value="">全部</option>
+                <option>客户</option>
+                <option>供应商</option>
+                <option>合作方</option>
+                <option>服务商</option>
+                <option>其他</option>
+              </select>
+            </label>
+            <label>
+              状态
+              <select name="queryStatus">
+                <option value="">全部</option>
+                <option>未查询</option>
+                <option>查询失败</option>
+                <option>查询成功</option>
+              </select>
+            </label>
+            <label>
+              是否为黑名单
+              <select name="isBlacklist">
+                <option value="">全部</option>
+                <option>是</option>
+                <option>否</option>
+                <option>未知</option>
+              </select>
+            </label>
+            <label>
+              经营异常
+              <select name="jyyc">
+                <option value="">全部</option>
+                <option>有</option>
+                <option>无</option>
+                <option>未知</option>
+              </select>
+            </label>
+            <label>
+              严重违法
+              <select name="yzwf">
+                <option value="">全部</option>
+                <option>有</option>
+                <option>无</option>
+                <option>未知</option>
+              </select>
+            </label>
+            <label>
+              重大税收违法
+              <select name="zdsswf">
+                <option value="">全部</option>
+                <option>有</option>
+                <option>无</option>
+                <option>未知</option>
+              </select>
+            </label>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title table-title">
+            <div>
+              <h2>监控对象列表</h2>
+            </div>
+            <div class="top-actions">
+              <button class="ghost-btn" id="refreshBtn">刷新</button>
+              <button class="primary-btn" id="openAddBtn">添加监控对象</button>
+              <button class="ghost-btn" id="batchBtn">批量更新</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th class="select-col">
+                    <input type="checkbox" id="selectAllSubjects" aria-label="全选监控对象" />
+                  </th>
+                  <th>企业名称</th>
+                  <th>纳税人识别号</th>
+                  <th>对象类型</th>
+                  <th>企业类型</th>
+                  <th>状态</th>
+                  <th>是否为黑名单</th>
+                  <th>经营异常</th>
+                  <th>严重违法</th>
+                  <th>重大税收违法</th>
+                  <th>最近查询时间</th>
+                  <th>最近更新人</th>
+                  <th>创建时间</th>
+                  <th>创建人</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="subjectRows"></tbody>
+            </table>
+            <div class="empty hidden" id="emptyList">暂无符合条件的监控对象</div>
+          </section>
+        </section>
+      </section>
+
+      <section id="detailPage" class="modal hidden" aria-hidden="true">
+        <div class="modal-card detail-card">
+          <div class="modal-head">
+            <div>
+              <h2>黑名单详情</h2>
+              <p>查看企业基础信息和风险明细。</p>
+            </div>
+            <button class="icon-btn" id="backToList" data-close="detailPage">×</button>
+          </div>
+          <section class="detail-head">
+          <div>
+            <div class="crumb">黑名单管理 / 详情</div>
+            <h2 id="detailName">-</h2>
+            <p id="detailMeta">-</p>
+          </div>
+        </section>
+        <div class="notice hidden" id="detailNotice"></div>
+
+        <section class="risk-cards" id="riskCards"></section>
+
+        <section class="panel">
+          <div class="panel-title">
+            <h2>企业基础信息</h2>
+          </div>
+          <div class="info-grid" id="baseInfo"></div>
+        </section>
+
+        <section class="risk-detail-grid">
+          <section class="panel">
+            <div class="panel-title">
+              <h2>经营异常</h2>
+            </div>
+            <div id="jyycDetail"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-title">
+              <h2>严重违法</h2>
+            </div>
+            <div id="yzwfDetail"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-title">
+              <h2>重大税收违法</h2>
+            </div>
+            <div id="zdsswfDetail"></div>
+          </section>
+        </section>
+        </div>
+      </section>
+
+      <section id="riskQueryPage" class="page">
+        <section class="panel">
+          <div class="panel-title">
+            <h2>查询条件</h2>
+          </div>
+          <form class="query-form" id="riskQueryForm">
+            <label>
+              公司名称 / 纳税人识别号
+              <input name="queryValue" placeholder="请输入公司名称或纳税人识别号" />
+            </label>
+            <button class="primary-btn query-action-btn" type="submit" id="riskQueryBtn">查询</button>
+            <button class="ghost-btn query-action-btn" type="button" id="resetRiskQuery">重置</button>
+          </form>
+          <div class="form-error hidden" id="riskQueryError"></div>
+        </section>
+
+        <section class="panel" id="riskQueryEmpty">
+          <div class="empty">暂无查询结果</div>
+        </section>
+
+        <section class="hidden" id="riskQueryDetail">
+          <section class="detail-head">
+            <div>
+              <div class="crumb">黑名单查询 / 详情</div>
+              <h2 id="queryDetailName">-</h2>
+              <p id="queryDetailMeta">-</p>
+            </div>
+          </section>
+          <div class="notice hidden" id="queryDetailNotice"></div>
+          <section class="risk-cards" id="queryRiskCards"></section>
+          <section class="panel">
+            <div class="panel-title">
+              <h2>企业基础信息</h2>
+            </div>
+            <div class="info-grid" id="queryBaseInfo"></div>
+          </section>
+          <section class="risk-detail-grid">
+            <section class="panel">
+              <div class="panel-title">
+                <h2>经营异常</h2>
+              </div>
+              <div id="queryJyycDetail"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-title">
+                <h2>严重违法</h2>
+              </div>
+              <div id="queryYzwfDetail"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-title">
+                <h2>重大税收违法</h2>
+              </div>
+              <div id="queryZdsswfDetail"></div>
+            </section>
+          </section>
+        </section>
+      </section>
+
+      <section id="monitorSettingsPage" class="page">
+        <section class="settings-layout">
+          <section class="panel">
+            <div class="panel-title">
+              <h2>更新策略</h2>
+            </div>
+            <form class="settings-form" id="monitorSettingsForm">
+              <label class="check">
+                <input type="checkbox" name="autoUpdate" checked />
+                开启定时自动更新
+              </label>
+              <div class="form-block" id="autoUpdateConfig">
+                <label>
+                  更新频率
+                  <select name="frequency">
+                    <option>每日</option>
+                    <option selected>每周</option>
+                    <option>每月</option>
+                  </select>
+                </label>
+                <label>
+                  执行时间
+                  <input type="time" name="runTime" value="02:00" />
+                </label>
+                <label>
+                  失败重试
+                  <select name="retryCount">
+                    <option>不重试</option>
+                    <option selected>重试 1 次</option>
+                    <option>重试 3 次</option>
+                  </select>
+                </label>
+              </div>
+            </form>
+            <div class="modal-actions settings-actions">
+              <button class="ghost-btn" id="resetSettings" type="button">恢复默认</button>
+              <button class="primary-btn" id="saveSettings" type="button">保存设置</button>
+            </div>
+          </section>
+        </section>
+      </section>
+
+      <section id="operationLogsPage" class="page">
+        <section class="panel">
+          <div class="panel-title">
+            <h2>日志筛选</h2>
+            <button class="text-btn" id="resetLogFilters">重置</button>
+          </div>
+          <form class="filter-grid" id="logFilterForm">
+            <label>
+              企业名称
+              <input name="target" placeholder="请输入企业名称" />
+            </label>
+            <label>
+              操作类型
+              <select name="actionType">
+                <option value="">全部</option>
+                <option>添加监控</option>
+                <option>手动更新</option>
+                <option>单次查询</option>
+                <option>编辑监控</option>
+                <option>移除监控</option>
+                <option>保存设置</option>
+                <option>系统更新</option>
+                <option>恢复默认</option>
+              </select>
+            </label>
+            <label>
+              操作人
+              <input name="operator" placeholder="请输入操作人" />
+            </label>
+            <label>
+              操作结果
+              <select name="result">
+                <option value="">全部</option>
+                <option>成功</option>
+                <option>失败</option>
+              </select>
+            </label>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title table-title">
+            <div>
+              <h2>操作日志</h2>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>企业名称</th>
+                  <th>纳税人识别号</th>
+                  <th>操作类型</th>
+                  <th>操作人</th>
+                  <th>操作时间</th>
+                  <th>操作结果</th>
+                </tr>
+              </thead>
+              <tbody id="operationLogRows"></tbody>
+            </table>
+            <div class="empty hidden" id="emptyLogs">暂无符合条件的操作日志</div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div class="modal hidden" id="addModal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>添加监控对象</h2>
+            <p>选择内部组织或手工创建外部企业。</p>
+          </div>
+          <button class="icon-btn" data-close="addModal">×</button>
+        </div>
+        <div class="type-switch">
+          <button class="switch active" data-type="内部组织">内部组织</button>
+          <button class="switch" data-type="外部企业">外部企业</button>
+        </div>
+        <form id="addForm">
+          <div class="form-block" id="internalForm">
+            <label>
+              组织选择
+              <select name="org">
+                <option value="">请选择内部组织</option>
+                <option value="华东采购中心|91310000MA1K38AB2C">华东采购中心 / 91310000MA1K38AB2C</option>
+                <option value="上海运营分公司|">上海运营分公司 / 无纳税人识别号</option>
+                <option value="北方销售中心|91110108MA01A9XY3F">北方销售中心 / 91110108MA01A9XY3F</option>
+              </select>
+            </label>
+            <label>
+              备注
+              <textarea name="internalRemark" placeholder="黑名单监控备注"></textarea>
+            </label>
+          </div>
+          <div class="form-block hidden" id="externalForm">
+            <label>
+              企业名称
+              <input name="enterpriseName" placeholder="请输入企业名称" />
+            </label>
+            <label>
+              纳税人识别号
+              <input name="enterpriseCredit" maxlength="18" placeholder="请输入 18 位纳税人识别号" />
+            </label>
+            <label>
+              企业类型
+              <select name="enterpriseRole">
+                <option>供应商</option>
+                <option>客户</option>
+                <option>合作方</option>
+                <option>服务商</option>
+                <option>其他</option>
+              </select>
+            </label>
+            <label>
+              备注
+              <textarea name="externalRemark" placeholder="业务备注"></textarea>
+            </label>
+          </div>
+          <label class="check">
+            <input type="checkbox" name="queryNow" checked />
+            是否立即查询
+          </label>
+          <div class="form-error hidden" id="addError"></div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-btn" data-close="addModal">取消</button>
+            <button type="submit" class="primary-btn">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="editModal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>编辑监控对象</h2>
+            <p>仅允许修改备注，其他字段不可编辑。</p>
+          </div>
+          <button class="icon-btn" data-close="editModal">×</button>
+        </div>
+        <div class="type-switch readonly-switch">
+          <button class="switch active" type="button" id="editInternalType" disabled>内部组织</button>
+          <button class="switch" type="button" id="editExternalType" disabled>外部企业</button>
+        </div>
+        <form id="editForm">
+          <input type="hidden" name="id" />
+          <div class="form-block hidden" id="editInternalForm">
+            <label>
+              组织名称
+              <input name="orgName" disabled />
+            </label>
+            <label>
+              纳税人识别号
+              <input name="internalCredit" disabled />
+            </label>
+            <label>
+              备注
+              <textarea name="internalRemark" placeholder="黑名单监控备注"></textarea>
+            </label>
+          </div>
+          <div class="form-block hidden" id="editExternalForm">
+            <label>
+              企业名称
+              <input name="enterpriseName" disabled />
+            </label>
+            <label>
+              纳税人识别号
+              <input name="enterpriseCredit" disabled />
+            </label>
+            <label>
+              企业类型
+              <select name="enterpriseRole" disabled>
+                <option>供应商</option>
+                <option>客户</option>
+                <option>合作方</option>
+                <option>服务商</option>
+                <option>其他</option>
+              </select>
+            </label>
+            <label>
+              备注
+              <textarea name="externalRemark" placeholder="业务备注"></textarea>
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-btn" data-close="editModal">取消</button>
+            <button type="submit" class="primary-btn">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="confirmModal" aria-hidden="true">
+      <div class="confirm-card">
+        <h2>确认重新查询？</h2>
+        <p id="confirmText">确认重新查询该企业最新黑名单信息？</p>
+        <div class="modal-actions">
+          <button class="ghost-btn" data-close="confirmModal">取消</button>
+          <button class="primary-btn" id="confirmUpdate">确认更新</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="drawer hidden" id="historyDrawer">
+      <div class="drawer-head">
+        <div>
+          <h2>历史查询详情</h2>
+          <p id="drawerSub">-</p>
+        </div>
+        <button class="icon-btn" data-close="historyDrawer">×</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+    </aside>
+
+    <div class="toast hidden" id="toast"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
