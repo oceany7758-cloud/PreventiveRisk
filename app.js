@@ -103,7 +103,7 @@ const subjects = [
     id: 2,
     name: "华东采购中心",
     credit: "91310000MA1K38AB2C",
-    subjectType: "内部组织",
+    subjectType: "内部企业",
     role: "",
     blackStatus: "非黑名单",
     jyyc: "无",
@@ -114,7 +114,7 @@ const subjects = [
     latestUser: "陈管理员",
     createdAt: "2026-06-01 14:13:02",
     createdBy: "陈管理员",
-    remark: "内部组织例行监控",
+    remark: "内部企业例行监控",
     apiName: "POST /v1/HMD/isHmdxx",
     reqId: "QXY20260601141302031",
     apiTime: "615ms",
@@ -258,17 +258,41 @@ const subjects = [
     baseInfo: {},
     risks: { jyyc: [], yzwf: [], zdsswf: [] },
     history: []
+  },
+  {
+    id: 5,
+    name: "成都锦程物流有限公司",
+    credit: "91510100MA6C1YQF8T",
+    subjectType: "外部企业",
+    role: "合作方",
+    blackStatus: "未查询",
+    jyyc: "未知",
+    yzwf: "未知",
+    zdsswf: "未知",
+    latestStatus: "QUERYING",
+    latestQueryTime: "2026-06-17 09:30:00",
+    latestUser: "系统",
+    createdAt: "2026-06-17 09:29:55",
+    createdBy: "镇多余",
+    remark: "批量更新中，等待接口返回",
+    apiName: "POST /v1/HMD/isHmdxx",
+    reqId: "-",
+    apiTime: "-",
+    org: "",
+    baseInfo: {},
+    risks: { jyyc: [], yzwf: [], zdsswf: [] },
+    history: []
   }
 ];
 
-let currentType = "内部组织";
+let currentType = "内部企业";
 let currentSubject = subjects[0];
 let pendingUpdateId = null;
 let selectedSubjectIds = new Set();
 let latestRiskQuery = null;
 const currentUserName = "镇多余";
 const pageMeta = {
-  listPage: "黑名单管理",
+  listPage: "黑名单监控",
   riskQueryPage: "黑名单查询",
   monitorSettingsPage: "监控设置",
   operationLogsPage: "操作日志"
@@ -280,27 +304,93 @@ let riskQueryRecords = [
     time: "2026-06-02 11:18:35",
     name: "宁波海川贸易有限公司",
     credit: "91330206MA2AJ7WQ9D",
+    subjectType: "外部企业",
+    role: "供应商",
     blackStatus: "非黑名单",
     jyyc: "无",
     yzwf: "无",
     zdsswf: "无",
+    latestStatus: "SUCCESS",
     operator: "王风控",
     purpose: "供应商准入",
     reqId: "QXY20260602111835016",
-    apiTime: "702ms"
+    apiTime: "702ms",
+    baseInfo: {
+      dqdm: "330200",
+      qyName: "宁波海川贸易有限公司",
+      nsrsbh: "91330206MA2AJ7WQ9D",
+      startDate: "2021-03-15",
+      operName: "陈海",
+      econKind: "有限责任公司",
+      econKindCode: "1100",
+      registCapi: "500 万人民币",
+      tags: null,
+      scope: "贸易代理、进出口业务",
+      status: "存续",
+      title: "执行董事",
+      address: "宁波市北仑区新碶街道明州路 301 号",
+      belongOrg: "宁波市北仑区市场监督管理局",
+      historyNames: "-",
+      termStart: "2021-03-15",
+      checkDate: "2025-06-20",
+      actualCapi: "500 万人民币",
+      termEnd: "长期",
+      revokeDate: "-",
+      endDate: "-",
+      revokeReason: "-",
+      orgNo: "MA2AJ7WQ9",
+      type: "01"
+    },
+    risks: { jyyc: [], yzwf: [], zdsswf: [] }
   },
   {
     time: "2026-06-01 17:42:09",
     name: "深圳瑞合科技有限公司",
     credit: "91440300MA5F0R1X2Q",
+    subjectType: "外部企业",
+    role: "客户",
     blackStatus: "黑名单",
     jyyc: "有",
     yzwf: "无",
     zdsswf: "无",
+    latestStatus: "SUCCESS",
     operator: "李运营",
     purpose: "客户合作审核",
     reqId: "QXY20260601174209028",
-    apiTime: "831ms"
+    apiTime: "831ms",
+    baseInfo: {
+      dqdm: "440300",
+      qyName: "深圳瑞合科技有限公司",
+      nsrsbh: "91440300MA5F0R1X2Q",
+      startDate: "2018-07-22",
+      operName: "张瑞",
+      econKind: "有限责任公司",
+      econKindCode: "1100",
+      registCapi: "1000 万人民币",
+      tags: null,
+      scope: "软件开发、信息技术服务",
+      status: "存续",
+      title: "总经理",
+      address: "深圳市南山区科技园南区数字技术产业园 B 栋 5 楼",
+      belongOrg: "深圳市市场监督管理局",
+      historyNames: "-",
+      termStart: "2018-07-22",
+      checkDate: "2025-12-10",
+      actualCapi: "800 万人民币",
+      termEnd: "长期",
+      revokeDate: "-",
+      endDate: "-",
+      revokeReason: "-",
+      orgNo: "MA5F0R1X2",
+      type: "01"
+    },
+    risks: {
+      jyyc: [
+        ["2025-11-05", "通过登记住所无法联系", "-", "-", "深圳市市场监督管理局", "广东", "440300123456789", "当前公示信息"]
+      ],
+      yzwf: [],
+      zdsswf: []
+    }
   }
 ];
 
@@ -323,7 +413,7 @@ let operationLogs = [
     target: "华东采购中心",
     credit: "91310000MA1K38AB2C",
     result: "成功",
-    desc: "从组织管理选择内部组织并立即查询。"
+    desc: "从组织管理选择内部企业并立即查询。"
   },
   {
     id: 3,
@@ -351,10 +441,10 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
 const baseInfoFields = [
-  ["qyName", "企业全名"],
+  ["qyName", "公司名称"],
   ["nsrsbh", "纳税人识别号"],
-  ["dqdm", "地区代码"],
-  ["startDate", "企业成立日期"],
+  ["dqdm", "地区"],
+  ["startDate", "成立日期"],
   ["operName", "企业法人"],
   ["econKind", "企业类型"],
   ["econKindCode", "企业类型代码"],
@@ -410,6 +500,7 @@ function statusTag(value) {
     查询成功: "success",
     非黑名单: "success",
     未命中黑名单: "success",
+    查询中: "info",
     未查询: "gray",
     是: "danger",
     否: "success",
@@ -424,7 +515,8 @@ function queryStatusLabel(item) {
   const map = {
     SUCCESS: "查询成功",
     FAILED: "查询失败",
-    NOT_QUERIED: "未查询"
+    NOT_QUERIED: "未查询",
+    QUERYING: "查询中"
   };
   return map[item.latestStatus] || "未查询";
 }
@@ -497,12 +589,12 @@ function renderRows() {
           <td>${item.createdAt || "-"}</td>
           <td>${item.createdBy || "-"}</td>
           <td>
-            <div class="row-actions">
+            ${queryStatusLabel(item) === "查询中" ? "" : `<div class="row-actions">
               <button data-action="detail" data-id="${item.id}">详情</button>
               <button data-action="update" data-id="${item.id}">更新</button>
               <button data-action="edit" data-id="${item.id}">编辑</button>
-              <button class="danger-action" data-action="remove" data-id="${item.id}">移除</button>
-            </div>
+              <button class="danger-action" data-action="remove" data-id="${item.id}">删除</button>
+            </div>`}
           </td>
         </tr>
       `
@@ -544,11 +636,23 @@ function closeModal(id) {
   $(`#${id}`).setAttribute("aria-hidden", "true");
 }
 
+function syncFrequencyDayConfig() {
+  const frequency = $("#settingsFrequency");
+  const weekly = $("#weeklyConfig");
+  const monthly = $("#monthlyConfig");
+  if (!frequency) return;
+  const value = frequency.value;
+  weekly.classList.toggle("hidden", value !== "每周");
+  monthly.classList.toggle("hidden", value !== "每月");
+}
+
 function syncAutoUpdateConfig() {
   const autoUpdate = document.querySelector('#monitorSettingsForm input[name="autoUpdate"]');
   const config = $("#autoUpdateConfig");
   if (!autoUpdate || !config) return;
   config.classList.toggle("hidden", !autoUpdate.checked);
+  config.classList.toggle("required", autoUpdate.checked);
+  if (autoUpdate.checked) syncFrequencyDayConfig();
 }
 
 function switchPage(page) {
@@ -558,6 +662,10 @@ function switchPage(page) {
   syncNav(page);
   renderPageTabs();
   if (page === "operationLogsPage") renderOperationLogs();
+  if (page === "riskQueryPage") {
+    switchRiskQueryTab("queryTab");
+    renderRiskQueryHistory();
+  }
 }
 
 function openPageTab(page) {
@@ -609,6 +717,7 @@ function riskLabel(item) {
 
 function normalizeBaseValue(key, value) {
   if (value === null || value === undefined || value === "") return "-";
+  if (key === "dqdm") return "上海市";
   if (key === "tags") {
     return String(value)
       .split(/[,\s]+/)
@@ -629,8 +738,8 @@ function renderBaseInfo(info) {
     .join("");
 }
 
-function renderDetail() {
-  const item = currentSubject;
+function renderDetail(optionalItem) {
+  const item = optionalItem || currentSubject;
   $("#detailName").textContent = item.name;
   $("#detailMeta").textContent = `${item.credit} · ${item.subjectType}${item.role ? ` · ${item.role}` : ""}${item.org ? ` · ${item.org}` : ""} · 最近查询：${item.latestQueryTime} · ${item.latestUser}`;
   const notice = $("#detailNotice");
@@ -653,6 +762,28 @@ function renderDetail() {
   });
 }
 
+function openQueryHistoryDetail(index) {
+  const record = riskQueryRecords[Number(index)];
+  const subject = {
+    name: record.name,
+    credit: record.credit,
+    subjectType: record.subjectType || "外部企业",
+    role: record.role || "",
+    org: record.org || "",
+    blackStatus: record.blackStatus,
+    jyyc: record.jyyc,
+    yzwf: record.yzwf,
+    zdsswf: record.zdsswf,
+    latestStatus: record.latestStatus || "SUCCESS",
+    latestQueryTime: record.time,
+    latestUser: record.operator,
+    baseInfo: record.baseInfo || {},
+    risks: record.risks || { jyyc: [], yzwf: [], zdsswf: [] }
+  };
+  renderDetail(subject);
+  openModal("detailPage");
+}
+
 function tableHtml(headers, rows, emptyText) {
   if (!rows.length) return `<div class="empty">${emptyText}</div>`;
   return `
@@ -672,7 +803,7 @@ function renderRiskDetails(item, targets) {
     "暂无经营异常记录"
   );
   $(targets.yzwf).innerHTML = tableHtml(
-    ["列入严重违法失信企业名单（黑名单）原因", "列入日期", "作出决定机关（列入）", "移出严重违法失信企业名单（黑名单）原因", "移除日期", "作出决定机关（移出）", "状态"],
+    ["列入严重违法失信企业名单（黑名单）原因", "列入日期", "作出决定机关（列入）", "移出严重违法失信企业名单（黑名单）原因", "删除日期", "作出决定机关（移出）", "状态"],
     item.risks.yzwf,
     "暂无严重违法记录"
   );
@@ -739,10 +870,10 @@ function submitAdd(event) {
   let remark = "";
   let subjectType = currentType;
 
-  if (currentType === "内部组织") {
-    if (!data.org) return showFormError("请选择内部组织");
+  if (currentType === "内部企业") {
+    if (!data.org) return showFormError("请选择内部企业");
     [name, credit] = data.org.split("|");
-    if (!credit) return showFormError("该内部组织无纳税人识别号，请先补充组织信息");
+    if (!credit) return showFormError("该内部企业无纳税人识别号，请先补充组织信息");
     remark = data.internalRemark || "";
   } else {
     name = (data.enterpriseName || "").trim();
@@ -782,7 +913,7 @@ function openEditModal(id) {
   if (!item) return;
   const form = $("#editForm");
   form.id.value = item.id;
-  const isInternal = item.subjectType === "内部组织";
+  const isInternal = item.subjectType === "内部企业";
   $("#editInternalType").classList.toggle("active", isInternal);
   $("#editExternalType").classList.toggle("active", !isInternal);
   $("#editInternalForm").classList.toggle("hidden", !isInternal);
@@ -808,7 +939,7 @@ function submitEdit(event) {
   const item = subjects.find((subject) => subject.id === Number(form.id.value));
   if (!item) return;
   const oldRemark = item.remark || "";
-  item.remark = item.subjectType === "内部组织" ? form.internalRemark.value : form.externalRemark.value;
+  item.remark = item.subjectType === "内部企业" ? form.internalRemark.value : form.externalRemark.value;
   closeModal("editModal");
   renderList();
   if (currentSubject?.id === item.id) {
@@ -861,7 +992,7 @@ function createSubject({ name, credit, role, remark, subjectType, queryNow }) {
     apiName: "POST /v1/HMD/isHmdxx",
     reqId: success ? `QXY${Date.now()}` : "-",
     apiTime: success ? "688ms" : "-",
-    org: subjectType === "内部组织" ? "组织管理" : "",
+    org: subjectType === "内部企业" ? "组织管理" : "",
     baseInfo: success
       ? {
           dqdm: "-",
@@ -869,7 +1000,7 @@ function createSubject({ name, credit, role, remark, subjectType, queryNow }) {
           nsrsbh: credit,
           startDate: "-",
           operName: "-",
-          econKind: subjectType === "内部组织" ? "内部组织" : "外部企业",
+          econKind: subjectType === "内部企业" ? "内部企业" : "外部企业",
           econKindCode: "-",
           registCapi: "-",
           tags: null,
@@ -887,7 +1018,7 @@ function createSubject({ name, credit, role, remark, subjectType, queryNow }) {
           endDate: "-",
           revokeReason: "-",
           orgNo: "-",
-          type: subjectType === "内部组织" ? "03" : "01"
+          type: subjectType === "内部企业" ? "03" : "01"
         }
       : {},
     risks: { jyyc: [], yzwf: [], zdsswf: [] },
@@ -997,18 +1128,52 @@ function simulateRiskQuery({ queryValue, purpose }) {
   const name = matched?.name || queryValue.trim();
   const credit = matched?.credit || (validateCredit(normalized) ? normalized : "91310000SIMULATE1A");
   const queryPurpose = purpose || "黑名单查询";
+  const subjectType = matched ? matched.subjectType : "外部企业";
+  const role = matched ? matched.role : "其他";
+  const baseInfo = matched ? { ...matched.baseInfo } : {
+    dqdm: "-",
+    qyName: name,
+    nsrsbh: credit,
+    startDate: "-",
+    operName: "-",
+    econKind: "外部企业",
+    econKindCode: "-",
+    registCapi: "-",
+    tags: null,
+    scope: "-",
+    status: "存续",
+    title: "-",
+    address: "-",
+    belongOrg: "-",
+    historyNames: "-",
+    termStart: "-",
+    checkDate: "-",
+    actualCapi: "-",
+    termEnd: "-",
+    revokeDate: "-",
+    endDate: "-",
+    revokeReason: "-",
+    orgNo: "-",
+    type: "01"
+  };
+  const risks = matched ? { ...matched.risks } : { jyyc: [], yzwf: [], zdsswf: [] };
   return {
     time: now,
     name,
     credit,
+    subjectType,
+    role,
     blackStatus: isRisky ? "黑名单" : "非黑名单",
     jyyc: isRisky ? "有" : "无",
     yzwf: "无",
     zdsswf: isRisky ? "有" : "无",
+    latestStatus: "SUCCESS",
     operator: currentUserName,
     purpose: queryPurpose,
     reqId: `QXY${Date.now()}`,
-    apiTime: `${620 + Math.floor(Math.random() * 260)}ms`
+    apiTime: `${620 + Math.floor(Math.random() * 260)}ms`,
+    baseInfo,
+    risks
   };
 }
 
@@ -1094,23 +1259,76 @@ function renderRiskQuery(subject) {
   });
 }
 
+function queryHistoryStatusLabel(record) {
+  if (record.latestStatus === "FAILED") return "查询失败";
+  if (record.latestStatus === "NOT_QUERIED") return "未查询";
+  return "查询成功";
+}
+
+function queryHistoryIsBlacklist(record) {
+  if (record.latestStatus !== "SUCCESS") return "未知";
+  if (record.blackStatus === "黑名单") return "是";
+  if (record.blackStatus === "非黑名单") return "否";
+  return "未知";
+}
+
+function filteredHistoryRecords() {
+  const form = $("#historyFilterForm");
+  if (!form) return riskQueryRecords;
+  const data = Object.fromEntries(new FormData(form).entries());
+  const nameFilter = (data.hName || "").trim();
+  const creditFilter = (data.hCredit || "").trim().toUpperCase();
+  const startFilter = data.hTimeStart || "";
+  const endFilter = data.hTimeEnd || "";
+  return riskQueryRecords.filter((record) => {
+    if (nameFilter && !record.name.includes(nameFilter)) return false;
+    if (creditFilter && !record.credit.toUpperCase().includes(creditFilter)) return false;
+    if (startFilter || endFilter) {
+      const recordDate = record.time.slice(0, 10);
+      if (startFilter && recordDate < startFilter) return false;
+      if (endFilter && recordDate > endFilter) return false;
+    }
+    return true;
+  });
+}
+
 function renderRiskQueryHistory() {
-  if (!$("#riskQueryHistory")) return;
-  $("#riskQueryHistory").innerHTML = tableHtml(
-    ["查询时间", "企业名称", "纳税人识别号", "查询用途", "黑名单状态", "经营异常", "严重违法", "重大税收违法", "接口流水号"],
-    riskQueryRecords.map((record) => [
-      record.time,
-      record.name,
-      `<span class="code">${record.credit}</span>`,
-      record.purpose,
-      statusTag(record.blackStatus),
-      statusTag(record.jyyc),
-      statusTag(record.yzwf),
-      statusTag(record.zdsswf),
-      record.reqId
-    ]),
-    "暂无单次查询记录"
-  );
+  const rows = filteredHistoryRecords();
+  const tbody = $("#riskQueryHistoryRows");
+  const empty = $("#riskQueryHistoryEmpty");
+  if (!tbody) return;
+  empty.classList.toggle("hidden", rows.length > 0);
+  tbody.innerHTML = rows
+    .map(
+      (record) => {
+        const originalIndex = riskQueryRecords.indexOf(record);
+        return `
+        <tr>
+          <td class="name-cell">${record.name}</td>
+          <td class="code">${record.credit}</td>
+          <td>${statusTag(queryHistoryStatusLabel(record))}</td>
+          <td>${statusTag(queryHistoryIsBlacklist(record))}</td>
+          <td>${statusTag(record.jyyc)}</td>
+          <td>${statusTag(record.yzwf)}</td>
+          <td>${statusTag(record.zdsswf)}</td>
+          <td>${record.time}</td>
+          <td>${record.operator}</td>
+          <td>
+            <div class="row-actions">
+              <button data-action="queryDetail" data-index="${originalIndex}">详情</button>
+            </div>
+          </td>
+        </tr>
+      `;
+      }
+    )
+    .join("");
+}
+
+function switchRiskQueryTab(tabId) {
+  $$("#riskQueryTabs .tab").forEach((btn) => btn.classList.toggle("active", btn.dataset.queryTab === tabId));
+  $("#queryTab").classList.toggle("hidden", tabId !== "queryTab");
+  $("#historyTab").classList.toggle("hidden", tabId !== "historyTab");
 }
 
 function submitRiskQuery(event) {
@@ -1134,6 +1352,7 @@ function submitRiskQuery(event) {
     const subject = buildQuerySubject(record);
     riskQueryRecords.unshift(record);
     renderRiskQuery(subject);
+    renderRiskQueryHistory();
     addOperationLog({
       actionType: "单次查询",
       target: record.name,
@@ -1153,6 +1372,7 @@ function resetRiskQuery() {
   $("#riskQueryDetail").classList.add("hidden");
   $("#riskQueryEmpty").classList.remove("hidden");
   latestRiskQuery = null;
+  switchRiskQueryTab("queryTab");
 }
 
 function addLatestQueryToMonitor() {
@@ -1271,6 +1491,7 @@ document.addEventListener("click", (event) => {
   const action = event.target.dataset.action;
   const id = event.target.dataset.id;
   if (action === "detail") openDetail(id);
+  if (action === "queryDetail") openQueryHistoryDetail(event.target.dataset.index);
   if (action === "update") requestUpdate(id);
   if (action === "edit") openEditModal(id);
   if (action === "remove") {
@@ -1280,13 +1501,13 @@ document.addEventListener("click", (event) => {
       subjects.splice(index, 1);
       renderList();
       addOperationLog({
-        actionType: "移除监控",
+        actionType: "删除监控",
         target: removed.name,
         credit: removed.credit,
         result: "成功",
-        desc: "从默认监控列表移除，历史查询记录保留。"
+        desc: "从默认监控列表删除，历史查询记录保留。"
       });
-      showToast("已移除监控对象，历史记录保留在业务库中。");
+      showToast("已删除监控对象，历史记录保留在业务库中。");
     }
   }
 
@@ -1338,6 +1559,7 @@ $("#saveSettings").addEventListener("click", () => {
 $("#resetSettings").addEventListener("click", () => {
   $("#monitorSettingsForm").reset();
   syncAutoUpdateConfig();
+  syncFrequencyDayConfig();
   addOperationLog({
     actionType: "恢复默认",
     target: "监控设置",
@@ -1348,6 +1570,7 @@ $("#resetSettings").addEventListener("click", () => {
   showToast("已恢复更新策略默认值");
 });
 document.querySelector('#monitorSettingsForm input[name="autoUpdate"]').addEventListener("change", syncAutoUpdateConfig);
+$("#settingsFrequency").addEventListener("change", syncFrequencyDayConfig);
 $("#logFilterForm").addEventListener("input", renderOperationLogs);
 $("#logFilterForm").addEventListener("change", renderOperationLogs);
 $("#resetLogFilters").addEventListener("click", () => {
@@ -1359,10 +1582,23 @@ $$(".switch").forEach((button) => {
   button.addEventListener("click", () => {
     currentType = button.dataset.type;
     $$(".switch").forEach((node) => node.classList.toggle("active", node === button));
-    $("#internalForm").classList.toggle("hidden", currentType !== "内部组织");
+    $("#internalForm").classList.toggle("hidden", currentType !== "内部企业");
     $("#externalForm").classList.toggle("hidden", currentType !== "外部企业");
     $("#addError").classList.add("hidden");
   });
+});
+
+$$("#riskQueryTabs .tab").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    switchRiskQueryTab(btn.dataset.queryTab);
+    if (btn.dataset.queryTab === "historyTab") renderRiskQueryHistory();
+  });
+});
+$("#historyFilterForm").addEventListener("input", renderRiskQueryHistory);
+$("#historyFilterForm").addEventListener("change", renderRiskQueryHistory);
+$("#resetHistoryFilters").addEventListener("click", () => {
+  $("#historyFilterForm").reset();
+  renderRiskQueryHistory();
 });
 
 renderList();
